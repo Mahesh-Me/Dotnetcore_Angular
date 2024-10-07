@@ -1,0 +1,34 @@
+# Ignore Visual Studio temporary files, build results, and
+# User-specific files
+.vscode/
+.vs/
+**/obj/
+**/bin/
+**/Debug/
+**/Release/
+# Rider IDE
+.idea/
+# User-specific files
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+# Auto-generated files
+Generated_Code/
+# Package management files
+packages/
+# Log files
+*.log
+# Web server logs
+logs/
+# Backup files
+*.bak
+# NuGet Packages
+*.nupkg
+# DotNetCore
+project.lock.json
+project.fragment.lock.json
+# Windows image file caches
+Thumbs.db
+# End of file line
+*.orig
