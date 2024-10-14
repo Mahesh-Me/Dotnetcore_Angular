@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { LoginDto } from '../../../shared/models/loginDto';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { SpinnerService } from '../../../core/services/spinner.service';
 
 @Component({
   selector: 'app-login',
@@ -16,7 +17,8 @@ export class LoginComponent {
   states = ['Odisha','Andhra Pradesh','Gujurat','Others']
 
   constructor(
-    private formBuilder:FormBuilder
+    private formBuilder:FormBuilder,
+    private _spinner:SpinnerService
   ){}
 
   ngOnInit(): void {

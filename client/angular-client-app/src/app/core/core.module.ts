@@ -8,6 +8,7 @@ import { ToastrModule } from 'ngx-toastr';
 import { LoggerService } from './services/logger.service';
 import { HTTP_INTERCEPTORS } from '@angular/common/http';
 import { HttpTokenInterceptor } from './interceptors/http-token.interceptor';
+import { SpinnerService } from './services/spinner.service';
 
 
 
@@ -25,6 +26,7 @@ import { HttpTokenInterceptor } from './interceptors/http-token.interceptor';
   ],
   providers:[
     CurrentUserService,
+    SpinnerService,
     LoggerService,
     AuthenticateService,
     {

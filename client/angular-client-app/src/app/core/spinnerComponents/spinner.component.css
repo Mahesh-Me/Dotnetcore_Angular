@@ -1,0 +1,45 @@
+.spinner-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(255, 255, 255, 0.8); /* Slightly opaque background */
+  z-index: 9999; /* Ensure it's above other elements */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  pointer-events: none; /* Prevent interactions with elements below */
+}
+
+.spinner {
+  display: flex;
+  gap: 8px; /* Space between dots */
+}
+
+.dot {
+  width: 15px; /* Dot size */
+  height: 15px; /* Dot size */
+  border-radius: 50%;
+  background-color: #3498db; /* Dot color */
+  animation: pulse 0.6s ease-in-out infinite;
+}
+
+.dot:nth-child(2) {
+  animation-delay: 0.2s; /* Staggered animations */
+}
+
+.dot:nth-child(3) {
+  animation-delay: 0.4s; /* Staggered animations */
+}
+
+@keyframes pulse {
+  0%, 100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+  50% {
+    transform: scale(1.5);
+    opacity: 0.5;
+  }
+}
