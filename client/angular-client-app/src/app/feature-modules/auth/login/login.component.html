@@ -1,12 +1,12 @@
 <div class="container d-flex justify-content-center align-items-center vh-100">
   <div class="card p-4 shadow-lg" style="width: 350px;
-    background: aliceblue;">
+    background: #abb9c5;">
     <div *ngIf="isLoginMode">
       <h3 class="text-center mb-4">Login</h3>
 
       <form>
         <div class="mb-3">
-          <label for="loginId" class="form-label">Email ID</label>
+          <label for="loginId" class="form-label">Email Id</label>
           <input type="text" class="form-control" id="loginId" name="email" placeholder="Enter Email" autocomplete="off"
             [(ngModel)]="loginDto.logInEmail" required />
         </div>
@@ -21,7 +21,7 @@
       </form>
       <div class="mt-3" style="text-align: end;">
         <small>
-          <a href="#">Forgot Password?</a>
+          <a href="javascript:void(0)">Forgot Password?</a>
         </small>
       </div>
       <div class="mt-3 text-center">
@@ -32,8 +32,23 @@
     </div>
     <div *ngIf="!isLoginMode">
       <h3 class="text-center mb-4">Register User</h3>
-      <form class="form" [formGroup]="registrationForm">
+      <form class="form" [formGroup]="registrationForm" (ngSubmit)="onRegisterSubmit($event)">
 
+        <!--Email Id-->
+        <div class="mb-3">
+          <label for="email">Email Id
+            <span class="text-red">*</span>
+          </label>
+          <input type="text" id="email" name="email"
+          class="form-control" formControlName="emailId" autocomplete="off"
+          placeholder="Enter Email Id">
+          <div *ngIf="(registerFormControl['emailId']?.touched)" class="text-danger">
+              <small *ngIf="registrationForm.get('emailId')?.errors?.['required']">Email Id is required.</small>
+              <small *ngIf="registrationForm.get('emailId')?.errors?.['pattern']">Invalid Email Address</small>
+          </div>
+        </div>
+
+        <!--Mobile Number-->
         <div class="mb-3">
           <label for="mobile" class="form-label">Mobile Number
             <span class="text-red">*</span>
@@ -47,6 +62,7 @@
           </div>
         </div>
 
+        <!--Full Name-->
         <div class="mb-3">
           <label for="fName" class="form-label">Full Name
             <span class="text-red">*</span>
@@ -61,8 +77,46 @@
           </div>
         </div>
 
+        <!--City-->
+        <div class="mb-3">
+          <label for="city" class="form-label">City
+            <span class="text-red">*</span>
+          </label>
+          <input type="text" class="form-control" formControlName="city"
+          id="city" name="city" placeholder="Enter City Name">
+          <div *ngIf="(registerFormControl['city']?.touched) && (registerFormControl['city']?.invalid)"
+          class="text-danger">
+            <small *ngIf="(registerFormControl['city']?.errors?.['required'])">City is required.</small>
+            <small *ngIf="(registerFormControl['city']?.errors?.['maxlength'])">City name must not exceed 10 characters.</small>
+          </div>
+        </div>
+
+        <!--State-->
+        <div class="mb-3">
+          <label for="state" class="form-label">State
+            <span class="text-red">*</span>
+          </label>
+          <select name="stateSelect" id="state" class="form-select" formControlName="state">
+            <option value="">Select State</option>
+            <option [value]="item" *ngFor="let item of states">
+              {{item}}
+            </option>
+          </select>
+          <div *ngIf="(registerFormControl['state']?.touched) && (registerFormControl['state']?.invalid)"
+          class="text-danger">
+            <small *ngIf="(registerFormControl['state']?.errors?.['required'])">State is required.</small>
+            <small *ngIf="(registerFormControl['state']?.errors?.['invalid'])">State is invalid</small>
+          </div>
+        </div>
         
+        <button type="submit" class="btn btn-success w-100"
+        [disabled]="registrationForm.invalid">Sign Up</button>
+
       </form>
+
+      <div class="mt-3 text-center">
+        <small>Already have an account? <a href="javascript:void(0)" (click)="switchToLogin()">Log in</a></small>
+      </div>
     </div>
   </div>
 </div>

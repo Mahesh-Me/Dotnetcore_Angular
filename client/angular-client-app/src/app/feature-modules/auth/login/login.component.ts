@@ -13,7 +13,7 @@ export class LoginComponent {
   loginDto:LoginDto = new LoginDto();
   registrationForm !:FormGroup;
 
-  states = ['Odisha','Andhra Pradesh']
+  states = ['Odisha','Andhra Pradesh','Gujurat','Others']
 
   constructor(
     private formBuilder:FormBuilder
@@ -26,7 +26,7 @@ export class LoginComponent {
   initializeRegistrationForm(){
     this.registrationForm = this.formBuilder.group(
       {
-        emailId: ['',[Validators.required, Validators.email]],
+        emailId: ['',[Validators.required, Validators.email, Validators.pattern(/^[^\s@]+@[^\s@]+\.[^\s@]+$/)]],
         fullName: ['',[Validators.required, Validators.maxLength(100)]],
         mobileNumber: ['',
           [Validators.required, Validators.maxLength(10),Validators.pattern(/^[6-9]\d{9}$/)]
@@ -51,5 +51,8 @@ export class LoginComponent {
   }
   get registerFormControl() {
     return this.registrationForm.controls;
+  }
+  onRegisterSubmit(event:any){
+
   }
 }
