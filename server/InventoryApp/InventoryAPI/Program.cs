@@ -51,6 +51,8 @@ builder.Services.AddSwaggerGen();
 // Register Services Here
 builder.Services.AddTransient<ITokenService, TokenService>();
 
+//Register Repositories Here
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
