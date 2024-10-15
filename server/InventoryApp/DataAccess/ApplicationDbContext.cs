@@ -1,5 +1,6 @@
 ﻿
 
+using Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 
 namespace DataAccess
@@ -16,7 +17,7 @@ namespace DataAccess
         }
 
         #region Register DbSet
-
+        public DbSet<Users> Users { get; set; }
         #endregion
     }
 }
