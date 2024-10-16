@@ -22,6 +22,7 @@ import { SpinnerService } from './services/spinner.service';
       timeOut:3000,
       positionClass:'toast-top-right',
       preventDuplicates:true
+     
     })
   ],
   providers:[
