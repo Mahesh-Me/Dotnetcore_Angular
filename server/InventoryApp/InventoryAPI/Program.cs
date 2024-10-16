@@ -1,12 +1,21 @@
 using Business;
 using Business.Abstract;
 using DataAccess;
+using DataAccess.Abstract;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
+using Serilog;
 using System.Text;
 
+
+Log.Logger = new LoggerConfiguration()
+             .WriteTo.File("Logs/log.txt", rollingInterval: RollingInterval.Day)
+             .CreateLogger();
+
 var builder = WebApplication.CreateBuilder(args);
+
+builder.Host.UseSerilog();
 
 // Add services to the container.
 // Configure DbContext here
@@ -52,7 +61,7 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddTransient<ITokenService, TokenService>();
 
 //Register Repositories Here
-
+builder.Services.AddTransient<IUserRepository, UserRepository>();
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
