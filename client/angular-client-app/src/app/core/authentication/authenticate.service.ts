@@ -6,6 +6,7 @@ import { ServerResponse } from '../../shared/models/server-response';
 import { CONFIGURATAION } from '../../configs/app-settings.config';
 import { CurrentUserService } from './currentuser.service';
 import { LoggerService } from '../services/logger.service';
+import { RepositoryAbstractService } from '../http/repository-abstract.service';
 
 @Injectable()
 export class AuthenticateService {
@@ -14,22 +15,23 @@ export class AuthenticateService {
   constructor(
     private http:HttpClient,
     private currentUserService: CurrentUserService,
-    private _logger:LoggerService
+    private _logger:LoggerService,
+    private abstractRepository: RepositoryAbstractService,
   ) { }
 
   public logIn(loginDto:LoginDto): Observable<ServerResponse>{
-    let actionUrl = CONFIGURATAION.ServerURL + CONFIGURATAION.baseURLs.apiUrl + 'User/AuthenticateUser';
+    let actionUrl = CONFIGURATAION.ServerURL + CONFIGURATAION.baseURLs.apiUrl + 'Token/Login';
     this.currentUserService.setToken = null;
     return new Observable((observer => {
-      this.http.post(actionUrl,JSON.stringify(loginDto)).subscribe({
+      this.abstractRepository.add(actionUrl,loginDto).subscribe({
         next: (response:any) => {
-          if(response.success && response.result != null){
-            let tokenResult = response.result;
+          if(response && response != null){
+            let tokenResult = response;
             this.currentUserService.setToken = tokenResult.token;
             this.currentUserService.setEmailId = tokenResult.userEmail;
-            this._logger.logSuccess(response.message);
           }
           observer.next(response);
+          observer.complete();
         },
         error:(err => {
           if(err){
@@ -37,7 +39,7 @@ export class AuthenticateService {
           }
         })
       })
-        observer.complete();
+        
     }))
   }
   isLogin() {

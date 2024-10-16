@@ -6,9 +6,10 @@ import { AuthenticateService } from './authentication/authenticate.service';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ToastrModule } from 'ngx-toastr';
 import { LoggerService } from './services/logger.service';
-import { HTTP_INTERCEPTORS } from '@angular/common/http';
+import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
 import { HttpTokenInterceptor } from './interceptors/http-token.interceptor';
 import { SpinnerService } from './services/spinner.service';
+import { RepositoryAbstractService } from './http/repository-abstract.service';
 
 
 
@@ -18,6 +19,7 @@ import { SpinnerService } from './services/spinner.service';
     CommonModule,
     SharedModule,
     BrowserAnimationsModule,
+    HttpClientModule,
     ToastrModule.forRoot({
       timeOut:3000,
       positionClass:'toast-top-right',
@@ -26,15 +28,16 @@ import { SpinnerService } from './services/spinner.service';
     })
   ],
   providers:[
-    CurrentUserService,
-    SpinnerService,
-    LoggerService,
-    AuthenticateService,
     {
       provide: HTTP_INTERCEPTORS,
       useClass: HttpTokenInterceptor,
       multi:true
-    }
+    },
+    CurrentUserService,
+    SpinnerService,
+    LoggerService,
+    RepositoryAbstractService,
+    AuthenticateService
   ]
 })
 export class CoreModule {

@@ -3,7 +3,7 @@ import { LoginDto } from '../../../shared/models/loginDto';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { SpinnerService } from '../../../core/services/spinner.service';
 import { LoggerService } from '../../../core/services/logger.service';
-import $ from 'jquery';
+import $, { error } from 'jquery';
 import { AuthenticateService } from '../../../core/authentication/authenticate.service';
 import { ServerResponse } from '../../../shared/models/server-response';
 import { Router } from '@angular/router';
@@ -58,21 +58,24 @@ export class LoginComponent {
     this._spinner.showLoader();
     if(this.validationOfLoginDto()){
       this._authService.logIn(this.loginDto).subscribe({
-        next: (response:ServerResponse) => {
-          if(response.success && response.result != null){
+        next: (response: ServerResponse) => {
+          if (response && response != null) {
             this._logger.logSuccess("Logged In Successfully");
-            this._spinner.hideLoader();
+            this._router.navigate(['/services/dashboard']);
+          } 
+          else {
+            this._logger.logError("Login failed. Please check your credentials.");
           }
           this._spinner.hideLoader();
-          this._router.navigate(['/services/dashboard']);
         },
-        error : (err => {
-          if(err){
-            this._logger.logError(err.message);
-            this._spinner.hideLoader();
-          }
-        })
-      })
+        error: (err) => {
+          this._logger.logError(err.message);
+          this._spinner.hideLoader();
+        },
+        complete: () => {
+          this._spinner.hideLoader(); // Ensure the spinner is hidden when done
+        }
+      });
     }
     else{
       this._spinner.hideLoader();
