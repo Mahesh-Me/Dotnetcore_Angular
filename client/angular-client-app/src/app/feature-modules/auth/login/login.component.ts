@@ -4,6 +4,9 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { SpinnerService } from '../../../core/services/spinner.service';
 import { LoggerService } from '../../../core/services/logger.service';
 import $ from 'jquery';
+import { AuthenticateService } from '../../../core/authentication/authenticate.service';
+import { ServerResponse } from '../../../shared/models/server-response';
+import { Router } from '@angular/router';
 
 
 @Component({
@@ -26,7 +29,9 @@ export class LoginComponent {
   constructor(
     private formBuilder:FormBuilder,
     private _spinner:SpinnerService,
-    private _logger: LoggerService
+    private _logger: LoggerService,
+    private _authService:AuthenticateService,
+    private _router: Router
   ){}
 
   ngOnInit(): void {
@@ -50,8 +55,27 @@ export class LoginComponent {
     )
   }
   onClickLogIn(){
+    this._spinner.showLoader();
     if(this.validationOfLoginDto()){
-
+      this._authService.logIn(this.loginDto).subscribe({
+        next: (response:ServerResponse) => {
+          if(response.success && response.result != null){
+            this._logger.logSuccess("Logged In Successfully");
+            this._spinner.hideLoader();
+          }
+          this._spinner.hideLoader();
+          this._router.navigate(['/services/dashboard']);
+        },
+        error : (err => {
+          if(err){
+            this._logger.logError(err.message);
+            this._spinner.hideLoader();
+          }
+        })
+      })
+    }
+    else{
+      this._spinner.hideLoader();
     }
   }
   validationOfLoginDto(): boolean{

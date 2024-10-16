@@ -25,8 +25,8 @@ export class AuthenticateService {
         next: (response:any) => {
           if(response.success && response.result != null){
             let tokenResult = response.result;
-            this.currentUserService.setToken = tokenResult;
-            this.currentUserService.setEmailId = loginDto.logInEmail;
+            this.currentUserService.setToken = tokenResult.token;
+            this.currentUserService.setEmailId = tokenResult.userEmail;
             this._logger.logSuccess(response.message);
           }
           observer.next(response);
