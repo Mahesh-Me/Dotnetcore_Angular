@@ -7,6 +7,7 @@ import { CONFIGURATAION } from '../../configs/app-settings.config';
 import { CurrentUserService } from './currentuser.service';
 import { LoggerService } from '../services/logger.service';
 import { RepositoryAbstractService } from '../http/repository-abstract.service';
+import { of as observableOf, of } from 'rxjs';
 
 @Injectable()
 export class AuthenticateService {
@@ -47,5 +48,9 @@ export class AuthenticateService {
       return true;
     }
     return false;
+  }
+  clientlogout(): Observable<boolean> {
+    this.currentUserService.clearUserInfo();
+    return observableOf(true);
   }
 }

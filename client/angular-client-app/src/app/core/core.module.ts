@@ -10,6 +10,7 @@ import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
 import { HttpTokenInterceptor } from './interceptors/http-token.interceptor';
 import { SpinnerService } from './services/spinner.service';
 import { RepositoryAbstractService } from './http/repository-abstract.service';
+import { AuthGuard } from './guards/auth.guard';
 
 
 
@@ -37,7 +38,8 @@ import { RepositoryAbstractService } from './http/repository-abstract.service';
     SpinnerService,
     LoggerService,
     RepositoryAbstractService,
-    AuthenticateService
+    AuthenticateService,
+    AuthGuard
   ]
 })
 export class CoreModule {
