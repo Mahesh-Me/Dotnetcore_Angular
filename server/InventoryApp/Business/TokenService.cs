@@ -28,8 +28,8 @@ namespace Business
         #region LogIn and Token Generation
         public LogInResponseDto Login(LogInDto logInDto)
         {
-            LogInResponseDto responseDto = new LogInResponseDto();   
-            if(logInDto is null)
+            LogInResponseDto responseDto = new LogInResponseDto();
+            if (logInDto is null)
                 throw new ArgumentNullException(nameof(logInDto));
 
             if (string.IsNullOrEmpty(logInDto.LoginEmail))
@@ -44,7 +44,7 @@ namespace Business
             if (userDetailsByEmail is null)
                 throw new ArgumentException("Email Id is not registered yet.");
 
-            if(userDetailsByEmail is not null)
+            if (userDetailsByEmail is not null)
             {
                 if (userDetailsByEmail.EmailId is null)
                     throw new ArgumentException("Invalid User");
@@ -94,18 +94,22 @@ namespace Business
             password = GenerateRandomPassword(8);
             if (userDto != null)
             {
-                Users userObj = new Users();
-                userObj.EmailId = userDto.EmailId;
-                userObj.FullName = userDto.FullName;
-                userObj.MobileNumber = userDto.MobileNumber;
-                userObj.City = userDto.City;
-                userObj.State = userDto.State;
-                userObj.Password = password;
+                Users userObj = new()
+                {
+                    EmailId = userDto.EmailId,
+                    FullName = userDto.FullName,
+                    MobileNumber = userDto.MobileNumber,
+                    City = userDto.City,
+                    State = userDto.State,
+                    Password = password
+                };
 
                 var user = await _userRepository.SaveUser(userObj);
-                UserRoles userRole = new UserRoles();
-                userRole.UserId = user.Id;
-                userRole.RoleId = 2; // for others
+                UserRoles userRole = new()
+                {
+                    UserId = user.Id,
+                    RoleId = 2 // for others
+                };
                 await _userRepository.SaveUserRole(userRole);
             }
             await _emailService.SendMailAsync(userDto.EmailId, "New Account Created", $"Your LogInId: {userDto.EmailId}<br> and Your Password: {password}");
