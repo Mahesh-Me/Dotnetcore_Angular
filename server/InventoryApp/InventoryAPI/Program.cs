@@ -59,6 +59,7 @@ builder.Services.AddSwaggerGen();
 
 // Register Services Here
 builder.Services.AddTransient<ITokenService, TokenService>();
+builder.Services.AddTransient<IEmailService,  EmailService>();
 
 //Register Repositories Here
 builder.Services.AddTransient<IUserRepository, UserRepository>();
