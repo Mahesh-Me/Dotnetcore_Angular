@@ -1,0 +1,47 @@
+/* Custom Navbar Styles */
+.custom-navbar {
+    background-color: #0d2b29; /* Dark teal background */
+    padding: 1rem;
+  }
+  
+  /* App Name Styling */
+  .navbar-brand .brand-text {
+    font-size: 1.6rem;
+    font-weight: bold;
+    color: #ffffff; /* White for 'Track' */
+  }
+  
+  .navbar-brand .brand-highlight {
+    font-size: 1.6rem;
+    font-weight: bold;
+    color: #00ff88; /* Green for 'Earn' */
+  }
+  
+  .nav-link {
+    color: #ffffff;
+    font-size: 1.2rem;
+  }
+  
+  .nav-link:hover {
+    color: #00ff88; /* Bright green hover effect */
+  }
+  
+  .nav-item .dropdown-menu {
+    background-color: #0d2b29; /* Match the navbar background */
+  }
+  
+  .dropdown-item {
+    color: #ffffff;
+  }
+  
+  .dropdown-item:hover {
+    background-color: #00ff88;
+    color: #0d2b29; /* Inverted hover colors */
+  }
+  
+  /* User Icon */
+  .bi-person-circle {
+    font-size: 1.5rem;
+    color: #00ff88; /* Green color for user icon */
+  }
+  

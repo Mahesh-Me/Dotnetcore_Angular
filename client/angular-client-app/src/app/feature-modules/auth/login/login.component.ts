@@ -1,7 +1,13 @@
-import { Component } from '@angular/core';
+import { Component} from '@angular/core';
 import { LoginDto } from '../../../shared/models/loginDto';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { SpinnerService } from '../../../core/services/spinner.service';
+import { LoggerService } from '../../../core/services/logger.service';
+import $, { error } from 'jquery';
+import { AuthenticateService } from '../../../core/authentication/authenticate.service';
+import { ServerResponse } from '../../../shared/models/server-response';
+import { Router } from '@angular/router';
+
 
 @Component({
   selector: 'app-login',
@@ -10,6 +16,10 @@ import { SpinnerService } from '../../../core/services/spinner.service';
   styleUrl: './login.component.css'
 })
 export class LoginComponent {
+  
+
+
+
   isLoginMode:boolean = true;
   loginDto:LoginDto = new LoginDto();
   registrationForm !:FormGroup;
@@ -18,13 +28,15 @@ export class LoginComponent {
 
   constructor(
     private formBuilder:FormBuilder,
-    private _spinner:SpinnerService
+    private _spinner:SpinnerService,
+    private _logger: LoggerService,
+    private _authService:AuthenticateService,
+    private _router: Router
   ){}
 
   ngOnInit(): void {
     this.initializeRegistrationForm();
   }
-  
   initializeRegistrationForm(){
     this.registrationForm = this.formBuilder.group(
       {
@@ -43,10 +55,56 @@ export class LoginComponent {
     )
   }
   onClickLogIn(){
-    console.log(this.loginDto);
+    this._spinner.showLoader();
+    if(this.validationOfLoginDto()){
+      this._authService.logIn(this.loginDto).subscribe({
+        next: (response: ServerResponse) => {
+          if (response && response != null) {
+            this._logger.logSuccess("Logged In Successfully");
+            this._router.navigate(['/services/dashboard']);
+          } 
+          else {
+            this._logger.logError("Login failed. Please check your credentials.");
+          }
+          this._spinner.hideLoader();
+        },
+        error: (err) => {
+          this._logger.logError(err.message);
+          this._spinner.hideLoader();
+        },
+        complete: () => {
+          this._spinner.hideLoader(); // Ensure the spinner is hidden when done
+        }
+      });
+    }
+    else{
+      this._spinner.hideLoader();
+    }
+  }
+  validationOfLoginDto(): boolean{
+    if(this.loginDto.logInEmail == null || this.loginDto.logInEmail.trim() == '' || this.loginDto.logInEmail == undefined){
+      this._logger.logError("Email Id cannot be blank.");
+      $('#loginId').get(0)?.focus();
+      return false;
+    }
+    if(this.loginDto.logInEmail != null || this.loginDto.logInEmail != undefined || this.loginDto.logInEmail != ''){
+      let mailRegEx = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      if(!mailRegEx.test(this.loginDto.logInEmail)){
+        this._logger.logError("Email Id is not valid.");
+        $('#loginId').get(0)?.focus();
+        return false;
+      }
+      if(this.loginDto.password == null || this.loginDto.password.trim() == '' || this.loginDto.password == undefined){
+        this._logger.logError("Password field cannot be blank");
+        $('#password').get(0)?.focus();
+        return false;
+      }
+    }
+    return true;
   }
   switchToRegister() {
     this.isLoginMode = false;
+    this.initializeRegistrationForm();
   }
   switchToLogin() {
     this.isLoginMode = true;

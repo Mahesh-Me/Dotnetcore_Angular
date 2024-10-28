@@ -1,6 +1,5 @@
 import { HttpErrorResponse, HttpEvent, HttpHandler, HttpInterceptor, HttpRequest } from "@angular/common/http";
 import { Injectable } from "@angular/core";
-import { AuthenticateService } from "../authentication/authenticate.service";
 import { catchError, Observable, throwError } from "rxjs";
 import { CurrentUserService } from "../authentication/currentuser.service";
 
@@ -10,6 +9,7 @@ export class HttpTokenInterceptor implements HttpInterceptor {
   intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
     // Get the auth token from the service.
     const token = this.authenticationService.getToken;
+    console.log('Interceptor hit for:', req.url);
     /*
     * The verbose way:
     // Clone the request and replace the original headers with
