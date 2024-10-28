@@ -35,6 +35,21 @@
 
       <form class="form" [formGroup]="registrationForm" (ngSubmit)="onRegisterSubmit($event)">
 
+        <!--Full Name-->
+        <div class="mb-3">
+          <label for="fName" class="form-label">Full Name
+            <span class="text-red">*</span>
+          </label>
+          <input type="text" class="form-control" formControlName="fullName" id="fName" name="fullName"
+            autocomplete="off" placeholder="Enter Full Name">
+          <div *ngIf="(registerFormControl['fullName']?.touched) && (registerFormControl['fullName']?.invalid)"
+            class="text-danger">
+            <small *ngIf="(registerFormControl['fullName']?.errors?.['required'])">Full Name is required</small>
+            <small *ngIf="(registerFormControl['fullName']?.errors)?.['maxlength']">Full Name cannot be greater than 100
+              characters</small>
+          </div>
+        </div>
+        
         <!--Email Id-->
         <div class="mb-3">
           <label for="email">Email Id
@@ -59,21 +74,6 @@
             <small *ngIf="registrationForm.get('mobileNumber')?.errors?.['required']">Mobile number is required.</small>
             <small *ngIf="registrationForm.get('mobileNumber')?.errors?.['pattern']">Invalid mobile number. Must start
               with 6-9 and have 10 digits.</small>
-          </div>
-        </div>
-
-        <!--Full Name-->
-        <div class="mb-3">
-          <label for="fName" class="form-label">Full Name
-            <span class="text-red">*</span>
-          </label>
-          <input type="text" class="form-control" formControlName="fullName" id="fName" name="fullName"
-            autocomplete="off" placeholder="Enter Full Name">
-          <div *ngIf="(registerFormControl['fullName']?.touched) && (registerFormControl['fullName']?.invalid)"
-            class="text-danger">
-            <small *ngIf="(registerFormControl['fullName']?.errors?.['required'])">Full Name is required</small>
-            <small *ngIf="(registerFormControl['fullName']?.errors)?.['maxlength']">Full Name cannot be greater than 100
-              characters</small>
           </div>
         </div>
 

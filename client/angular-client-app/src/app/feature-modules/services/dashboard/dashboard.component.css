@@ -1,0 +1,55 @@
+/* Custom Card Styles */
+.custom-card {
+    border-radius: 20px;
+    padding: 1rem;
+    text-align: center;
+    position: relative;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  }
+  
+  .card-icon {
+    font-size: 1.5rem;
+    color: rgba(0, 0, 0, 0.5); /* Subtle icon color */
+    position: absolute;
+    top: 15px;
+    right: 15px;
+  }
+  
+  .card-title {
+    font-size: 1.2rem;
+    font-weight: bold;
+    margin-bottom: 0.5rem;
+    color: #444444;
+  }
+  
+  .card-amount {
+    font-size: 2rem;
+    font-weight: bold;
+    color: #222222;
+  }
+  
+  .card-percentage {
+    font-size: 1rem;
+    font-weight: normal;
+    margin-top: 0.5rem;
+  }
+  
+  /* Custom Background Colors */
+  .bg-light-blue {
+    background-color: #e6f1ff;
+  }
+  
+  .bg-light-purple {
+    background-color: #f3e6ff;
+  }
+  
+  .bg-light-green {
+    background-color: #e6ffe6;
+  }
+  
+  /* Card Hover Effect */
+  .custom-card:hover {
+    transform: translateY(-5px);
+    transition: transform 0.2s ease;
+  }
+  
