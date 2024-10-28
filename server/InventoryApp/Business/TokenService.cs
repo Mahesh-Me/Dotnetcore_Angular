@@ -3,6 +3,7 @@
 using Business.Abstract;
 using DataAccess.Abstract;
 using Domain.Dtos;
+using Domain.Entities;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
@@ -15,13 +16,16 @@ namespace Business
     {
         private readonly IConfiguration _configuration;
         private readonly IUserRepository _userRepository;
-        public TokenService(IConfiguration configuration, IUserRepository userRepository)
+        private static readonly Random _random = new Random();
+        private readonly IEmailService _emailService;
+        public TokenService(IConfiguration configuration, IUserRepository userRepository, IEmailService emailService)
         {
             _configuration = configuration;
             _userRepository = userRepository;
+            _emailService = emailService;
         }
 
-
+        #region LogIn and Token Generation
         public LogInResponseDto Login(LogInDto logInDto)
         {
             LogInResponseDto responseDto = new LogInResponseDto();   
@@ -77,6 +81,53 @@ namespace Business
             {
                 throw new ArgumentException("LoginId and Password is not valid.");
             }
+        }
+        #endregion
+
+        #region Register User
+        public async Task<bool> RegisterUser(RegisterUserDto userDto)
+        {
+            if (userDto is null)
+                throw new ArgumentException("Invalid Details Received");
+
+            string password = string.Empty;
+            password = GenerateRandomPassword(8);
+            if (userDto != null)
+            {
+                Users userObj = new Users();
+                userObj.EmailId = userDto.EmailId;
+                userObj.FullName = userDto.FullName;
+                userObj.MobileNumber = userDto.MobileNumber;
+                userObj.City = userDto.City;
+                userObj.State = userDto.State;
+                userObj.Password = password;
+
+                var user = await _userRepository.SaveUser(userObj);
+                UserRoles userRole = new UserRoles();
+                userRole.UserId = user.Id;
+                userRole.RoleId = 2; // for others
+                await _userRepository.SaveUserRole(userRole);
+            }
+            await _emailService.SendMailAsync(userDto.EmailId, "New Account Created", $"Your LogInId: {userDto.EmailId}<br> and Your Password: {password}");
+            return true;
+        }
+        #endregion
+
+        private string GenerateRandomPassword(int length)
+        {
+            if (length < 2)
+                throw new ArgumentException("Password length should be at least 2.");
+
+            var passwordBuilder = new StringBuilder();
+            for (int i = 0; i < length - 1; i++)
+            {
+                char uppercaseLetter = (char)_random.Next('A', 'Z' + 1);
+                passwordBuilder.Append(uppercaseLetter);
+            }
+            int number = _random.Next(1, 11);
+            passwordBuilder.Append(number);
+
+            return passwordBuilder.ToString();
         }
     }
 }

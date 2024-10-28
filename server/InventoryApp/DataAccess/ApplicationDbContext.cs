@@ -18,6 +18,7 @@ namespace DataAccess
 
         #region Register DbSet
         public DbSet<Users> Users { get; set; }
+        public DbSet<UserRoles> UserRoles { get; set; }
         #endregion
     }
 }
