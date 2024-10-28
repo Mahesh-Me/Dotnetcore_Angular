@@ -42,5 +42,25 @@ namespace InventoryAPI.Controllers
                 return BadRequest(ex.Message);
             }
         }
+        [HttpPost]
+        [Route("Register")]
+        public async Task<IActionResult> RegisterUser([FromBody] RegisterUserDto registerUserDto)
+        {
+            try
+            {
+                var result = await _tokenService.RegisterUser(registerUserDto);
+                return Ok(result);
+            }
+            catch (ArgumentException ex)
+            {
+                _logger.LogError(ex, "Error Occured");
+                return BadRequest(ex.Message);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error occured");
+                return BadRequest(ex.Message);
+            }
+        }
     }
 }
