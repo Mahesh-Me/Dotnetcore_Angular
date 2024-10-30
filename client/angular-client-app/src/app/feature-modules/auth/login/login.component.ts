@@ -7,6 +7,7 @@ import $, { error } from 'jquery';
 import { AuthenticateService } from '../../../core/authentication/authenticate.service';
 import { ServerResponse } from '../../../shared/models/server-response';
 import { Router } from '@angular/router';
+import { RegisterUserDto } from '../../../shared/models/registerUserDto';
 
 
 @Component({
@@ -23,6 +24,7 @@ export class LoginComponent {
   isLoginMode:boolean = true;
   loginDto:LoginDto = new LoginDto();
   registrationForm !:FormGroup;
+  userDto:RegisterUserDto = new RegisterUserDto();
 
   states = ['Odisha','Andhra Pradesh','Gujurat','Others']
 
@@ -113,6 +115,32 @@ export class LoginComponent {
     return this.registrationForm.controls;
   }
   onRegisterSubmit(event:any){
-
+    if(this.registrationForm.valid){
+      this._spinner.showLoader();
+      this.userDto = {...this.registrationForm.value}
+      if(this.userDto != null){
+        this._authService.registerUser(this.userDto).subscribe({
+          next: (res:any) => {
+            if(res && res == true){
+              this._logger.logSuccess("Register User Successfully");
+              this._spinner.hideLoader();
+              this._router.navigate(['/auth/login']);
+              window.location.reload();
+              this.initializeRegistrationForm();
+            }
+            this._spinner.hideLoader();
+          },
+          error: (err) => {
+            if(err){
+              this._logger.logError(err.message);
+              this._spinner.hideLoader();
+            }
+          },
+          complete: () => {
+            this._spinner.hideLoader();
+          }
+        })
+      }
+    }
   }
 }
