@@ -52,4 +52,17 @@
     transform: translateY(-5px);
     transition: transform 0.2s ease;
   }
+  .set-budget-btn {
+    padding: 10px 20px;
+    background-color: #4CAF50; /* Customize color as needed */
+    color: white;
+    border: none;
+    border-radius: 5px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+  }
+  .set-budget-btn:hover {
+    background-color: #45a049;
+  }
   
