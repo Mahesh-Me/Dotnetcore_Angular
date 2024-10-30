@@ -69,7 +69,7 @@
             <span class="text-red">*</span>
           </label>
           <input type="text" id="mobile" name="mobile" class="form-control" formControlName="mobileNumber"
-            autocomplete="off" placeholder="Enter Mobile Number">
+            autocomplete="off" placeholder="Enter Mobile Number" maxlength="10">
           <div *ngIf="(registerFormControl['mobileNumber']?.touched)" class="text-danger">
             <small *ngIf="registrationForm.get('mobileNumber')?.errors?.['required']">Mobile number is required.</small>
             <small *ngIf="registrationForm.get('mobileNumber')?.errors?.['pattern']">Invalid mobile number. Must start
@@ -83,7 +83,7 @@
             <span class="text-red">*</span>
           </label>
           <input type="text" class="form-control" formControlName="city" id="city" name="city"
-            placeholder="Enter City Name">
+            placeholder="Enter City Name" autocomplete="off">
           <div *ngIf="(registerFormControl['city']?.touched) && (registerFormControl['city']?.invalid)"
             class="text-danger">
             <small *ngIf="(registerFormControl['city']?.errors?.['required'])">City is required.</small>

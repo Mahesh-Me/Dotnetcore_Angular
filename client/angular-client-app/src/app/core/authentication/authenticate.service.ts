@@ -8,6 +8,7 @@ import { CurrentUserService } from './currentuser.service';
 import { LoggerService } from '../services/logger.service';
 import { RepositoryAbstractService } from '../http/repository-abstract.service';
 import { of as observableOf, of } from 'rxjs';
+import { RegisterUserDto } from '../../shared/models/registerUserDto';
 
 @Injectable()
 export class AuthenticateService {
@@ -52,5 +53,9 @@ export class AuthenticateService {
   clientlogout(): Observable<boolean> {
     this.currentUserService.clearUserInfo();
     return observableOf(true);
+  }
+  registerUser(registerDto:RegisterUserDto):Observable<ServerResponse>{
+    let actionUrl = CONFIGURATAION.ServerURL + CONFIGURATAION.baseURLs.apiUrl + 'Token/Register';
+    return this.abstractRepository.add(actionUrl,registerDto);
   }
 }
