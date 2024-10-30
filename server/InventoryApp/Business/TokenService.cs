@@ -90,6 +90,10 @@ namespace Business
             if (userDto is null)
                 throw new ArgumentException("Invalid Details Received");
 
+            var existingUser = _userRepository.GetUserByEmailId(userDto.EmailId);
+            if (existingUser != null)
+                throw new ArgumentException("Email Address Already Registered.");
+
             string password = string.Empty;
             password = GenerateRandomPassword(8);
             if (userDto != null)
@@ -101,7 +105,8 @@ namespace Business
                     MobileNumber = userDto.MobileNumber,
                     City = userDto.City,
                     State = userDto.State,
-                    Password = password
+                    Password = password,
+                    IsActive = true
                 };
 
                 var user = await _userRepository.SaveUser(userObj);
@@ -110,9 +115,9 @@ namespace Business
                     UserId = user.Id,
                     RoleId = 2 // for others
                 };
-                await _userRepository.SaveUserRole(userRole);
+                //await _userRepository.SaveUserRole(userRole);
             }
-            await _emailService.SendMailAsync(userDto.EmailId, "New Account Created", $"Your LogInId: {userDto.EmailId}<br> and Your Password: {password}");
+            await _emailService.SendMailAsync(userDto.EmailId, "New Account Created", $"Your LogIn Id: {userDto.EmailId}<br> and Your Password: {password}");
             return true;
         }
         #endregion
