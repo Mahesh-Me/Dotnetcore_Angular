@@ -65,4 +65,53 @@
   .set-budget-btn:hover {
     background-color: #45a049;
   }
+
+  .modal-header {
+    border-bottom: none; /* Remove bottom border */
+    padding-bottom: 0;
+  }
+  
+  .modal-title {
+    font-weight: bold;
+    font-size: 1.25rem; /* Increase title font size */
+  }
+  
+  .modal-body {
+    padding-top: 0;
+  }
+  
+  .form-label {
+    font-weight: 600; 
+    color: #343a40; /* Dark color for labels */
+  }
+  
+  .form-control,
+  .form-select {
+    height: calc(2.5em + .75rem + 2px); /* Adjust input and dropdown height */
+    border-radius: 0.25rem; /* Slightly rounded corners */
+    box-shadow: none; /* Remove shadow */
+  }
+  
+  .modal-footer {
+    border-top: none; /* Remove top border */
+  }
+  
+  .modal-footer .btn-secondary {
+    background-color: #6c757d; /* Grey for close button */
+    border: none;
+  }
+  
+  .modal-footer .btn-primary {
+    background-color: #007bff; /* Bright blue for save button */
+    border: none;
+  }
+  
+  .modal-footer .btn-primary:hover {
+    background-color: #0056b3; /* Darker blue on hover */
+  }
+  
+  .modal-footer .btn-secondary:hover {
+    background-color: #5a6268; /* Darker grey on hover */
+  }
+  
   

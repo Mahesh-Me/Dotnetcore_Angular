@@ -64,11 +64,22 @@ data-bs-backdrop="static">
         <h5 class="modal-title" id="exampleModalLabel">SET BUDGET</h5>
       </div>
       <div class="modal-body">
-        ...
+        <div class="mb-3">
+          <label for="amount" class="form-label">Amount</label>
+          <input type="text" class="form-control" id="amount"
+          placeholder="Enter Amount" [(ngModel)]="budgetAmount">
+        </div>
+        <div class="mb-3">
+          <label for="dropdownSelect" class="form-label">Choose Category</label>
+          <select name="catSelect" id="catSelect" class="form-select form-select2" >
+            <option value="">Select Option</option>
+            <option value=""></option>
+          </select> 
+        </div>
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-        <button type="button" class="btn btn-primary">Save changes</button>
+        <button type="button" class="btn btn-primary">Save</button>
       </div>
     </div>
   </div>

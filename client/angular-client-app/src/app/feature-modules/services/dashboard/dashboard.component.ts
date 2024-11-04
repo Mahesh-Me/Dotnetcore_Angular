@@ -13,6 +13,7 @@ export class DashboardComponent {
 
   isBudgetModalOpen = false;
   userName: string = 'Mahesh';
+  budgetAmount:string='';
 
 
   openBudgetModal() {
