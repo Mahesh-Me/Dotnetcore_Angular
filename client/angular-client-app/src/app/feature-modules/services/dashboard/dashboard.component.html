@@ -73,7 +73,9 @@ data-bs-backdrop="static">
           <label for="dropdownSelect" class="form-label">Choose Category</label>
           <select name="catSelect" id="catSelect" class="form-select form-select2" >
             <option value="">Select Option</option>
-            <option value=""></option>
+            <option [value]="category.id" *ngFor="let category of categoryList">
+              {{getEmoji(category.IconLink)}} {{category.categoryName}}
+            </option>
           </select> 
         </div>
       </div>
