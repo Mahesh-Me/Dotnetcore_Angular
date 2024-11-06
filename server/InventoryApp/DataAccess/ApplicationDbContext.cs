@@ -19,6 +19,8 @@ namespace DataAccess
         #region Register DbSet
         public DbSet<Users> Users { get; set; }
         public DbSet<UserRoles> UserRoles { get; set; }
+        public DbSet<CategoryMaster> CategoryMaster {  get; set; }
+        public DbSet<CategoryBudget> CategoryBudget { get; set; }
         #endregion
     }
 }

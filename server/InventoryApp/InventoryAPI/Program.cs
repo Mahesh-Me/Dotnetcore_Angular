@@ -60,9 +60,13 @@ builder.Services.AddSwaggerGen();
 // Register Services Here
 builder.Services.AddTransient<ITokenService, TokenService>();
 builder.Services.AddTransient<IEmailService,  EmailService>();
+builder.Services.AddTransient<ICommonService, CommonService>();
+builder.Services.AddTransient<ITransactionService, TransactionService>();
 
 //Register Repositories Here
 builder.Services.AddTransient<IUserRepository, UserRepository>();
+builder.Services.AddTransient<ICommonReposiotry, CommonRepository>();
+builder.Services.AddTransient<ITransactionRepository, TransactionRepository>();
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -72,6 +76,7 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.UseCors("AllowCors");
