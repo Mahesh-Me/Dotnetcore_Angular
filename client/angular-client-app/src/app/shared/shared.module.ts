@@ -1,18 +1,21 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { HeaderComponent } from './components/header.component';
+import { NumberOnlyDirective } from './directives/number-only.directive';
 
 
 
 @NgModule({
   declarations: [
-    HeaderComponent
+    HeaderComponent,
+    NumberOnlyDirective
   ],
   imports: [
     CommonModule
   ],
   exports:[
-    HeaderComponent
+    HeaderComponent,
+    NumberOnlyDirective
   ]
 })
 export class SharedModule { }

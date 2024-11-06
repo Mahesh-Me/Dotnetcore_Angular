@@ -14,7 +14,7 @@ export class CommonService{
     {}
 
     getAllCategoryList():Observable<ServerResponse>{
-        let actionUrl = CONFIGURATAION.ServerURL + CONFIGURATAION.baseURLs.apiUrl + 'Common/GetAllCategory';
+        let actionUrl = CONFIGURATAION.ServerURL + CONFIGURATAION.baseURLs.apiUrl + 'Common/GetAllCategoryMaster';
         return this.abstractRepository.getAll(actionUrl);
     }
 }

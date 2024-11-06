@@ -22,7 +22,7 @@ export class CurrentUserService {
     public set setEmailId(data:any){
         localStorage.setItem('emailId',data);
     }
-    public get emailId(){
+    public get getEmailId(){
         return localStorage.getItem('emailId');
     }
     public clearUserInfo(){

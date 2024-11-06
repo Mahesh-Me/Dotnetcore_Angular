@@ -87,6 +87,9 @@
   
   .form-control,
   .form-select {
+    border-radius: 30px;
+  padding: 10px 15px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
     height: calc(2.5em + .75rem + 2px); /* Adjust input and dropdown height */
     border-radius: 0.25rem; /* Slightly rounded corners */
     box-shadow: none; /* Remove shadow */
@@ -112,6 +115,53 @@
   
   .modal-footer .btn-secondary:hover {
     background-color: #5a6268; /* Darker grey on hover */
+  }
+  .modal-content {
+    border-radius: 12px;
+  }
+  .styled-dropdown {
+    border-radius: 30px;
+    padding: 10px;
+    appearance: none;
+    background-color: #f8f9fa;
+    color: #333;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  }
+  
+  /* Styling dropdown options */
+  .styled-dropdown option {
+    padding: 10px;
+    background-color: #ffffff;
+    color: #333;
+    font-size: 1rem;
+    display: flex;
+    align-items: center;
+  }
+  
+  /* Aligning emoji with text in dropdown options */
+  .styled-dropdown option::before {
+    content: attr(data-icon) " ";
+    margin-right: 8px;
+    font-size: 1.2em;
+  }
+  
+  /* Optional: Add a caret icon */
+  .styled-dropdown {
+    background-image: url('data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 4 5"%3E%3Cpath fill="%23333" d="M2 0L0 2h4z" /%3E%3C/svg%3E');
+    background-repeat: no-repeat;
+    background-position: right 10px top 50%;
+    background-size: 10px;
+  }
+  .budget-list-box {
+    margin-top: 10px;
+    padding: 15px;
+    background-color: #f8f9fa;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  }
+  .table th,
+  .table td {
+    vertical-align: middle;
   }
   
   
