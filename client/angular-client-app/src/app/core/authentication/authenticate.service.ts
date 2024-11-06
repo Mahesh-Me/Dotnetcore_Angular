@@ -1,4 +1,3 @@
-import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { LoginDto } from '../../shared/models/loginDto';
 import { Observable } from 'rxjs';
@@ -15,7 +14,6 @@ export class AuthenticateService {
 
   redirectUrl:string = '/auth/login';
   constructor(
-    private http:HttpClient,
     private currentUserService: CurrentUserService,
     private _logger:LoggerService,
     private abstractRepository: RepositoryAbstractService,
