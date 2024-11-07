@@ -20,7 +20,6 @@
 </div>
 <div class="container mt-4">
   <div class="row">
-    <!-- Income Card -->
     <div class="col-md-4">
       <div class="card custom-card bg-light-blue">
         <div class="card-body">
@@ -28,11 +27,8 @@
             <i class="bi bi-arrow-up-right-circle"></i>
             <!-- Replace with desired icon -->
           </div>
-          <h5 class="card-title">Income</h5>
-          <h2 class="card-amount">
-            <span class="text-success">+</span
-            ><i class="bi bi-currency-rupee"></i>1,655
-          </h2>
+          <h5 class="card-title">Planned Amount</h5>
+          <h2 class="card-amount"><span class="text-success">+</span><i class="bi bi-currency-rupee"></i>{{totalPlannedAmount}}</h2>
         </div>
       </div>
     </div>
@@ -48,7 +44,7 @@
           <h5 class="card-title">Expense</h5>
           <h2 class="card-amount">
             <span class="text-danger">-</span
-            ><i class="bi bi-currency-rupee"></i>435
+            ><i class="bi bi-currency-rupee"></i>{{totalSpentAmount}}
           </h2>
         </div>
       </div>
@@ -62,13 +58,45 @@
             <i class="bi bi-wallet2"></i>
             <!-- Replace with desired icon -->
           </div>
-          <h5 class="card-title">Total</h5>
-          <h2 class="card-amount"><i class="bi bi-currency-rupee"></i>842</h2>
+          <h5 class="card-title">Outstanding Balance</h5>
+          <h2 class="card-amount"><i class="bi bi-currency-rupee"></i>{{totalPlannedAmount- totalSpentAmount}}</h2>
         </div>
       </div>
     </div>
-    <div class="col-12 mt-4">
+    <div class="d-flex justify-content-between align-items-center mt-4">
       <h5 style="font-weight: bold; font-size: large;">Planned Budget Details</h5>
+      <button class="btn btn-success btn-sm" (click)="openExpenseModal()">Add Expense</button>
+    </div>
+    <div class="budget-list-box mt-2">
+      <table class="table table-hover table-bordered">
+        <thead>
+          <tr>
+            <th>Category</th>
+            <th>Amount</th>
+            <th>Month</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngIf="budgetList.length == 0">
+            <td colspan="4">Sorry, No Records found !!</td>
+          </tr>
+          <tr *ngFor="let item of budgetList">
+            <td>{{ getCategoryName(item.categoryId?.toString() || '') }}</td>
+            <td>₹ {{ item.expenseLimit }}</td>
+            <td>{{ item.month }}</td>
+            <td>
+              <button class="btn btn-sm btn-primary me-2" (click)="onEditClicked(item)">Edit</button>
+              <button class="btn btn-sm btn-danger" (click)="onDeleteClicked(item)">Delete</button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    
+    <!-- <div class="col-12 mt-4">
+      <h5 style="font-weight: bold; font-size: large;">Planned Budget Details</h5>
+      <button class="btn btn-success btn-sm ms-3">Add Expense</button>
       <div class="budget-list-box">
         <table class="table table-hover table-bordered">
           <thead>
@@ -83,7 +111,7 @@
             <tr *ngIf="budgetList.length == 0">
               Sorry, No Records found !!
             </tr>
-            <!-- Replace with *ngFor to iterate over the budget items -->
+            
             <tr *ngFor="let item of budgetList">
               <td>{{getCategoryName(item.categoryId?.toString() || '')}}</td>
               <td>₹ {{ item.expenseLimit }}</td>
@@ -102,7 +130,7 @@
           </tbody>
         </table>
       </div>
-    </div>
+    </div> -->
   </div>
 </div>
 
@@ -167,6 +195,83 @@
           type="button"
           class="btn btn-outline-secondary rounded-pill"
           data-bs-dismiss="modal"
+        (click)="closeBudgetModal()">
+          Close
+        </button>
+        <button type="button" class="btn btn-primary rounded-pill shadow-sm"
+        (click)="saveBudgetDetailsForMonth()" *ngIf="!isEditMode">
+          Save
+        </button>
+        <button type="button" class="btn btn-success rounded-pill shadow-sm"
+        (click)="updateBudgetDetails()" *ngIf="isEditMode">
+          Update
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Expense Modal -->
+<!-- <div
+  class="modal fade"
+  id="expenseModal"
+  tabindex="-1"
+  role="dialog"
+  aria-labelledby="expenseModalLabel"
+  aria-hidden="true"
+  data-bs-backdrop="static"
+>
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content shadow-lg border-0 rounded-3">
+      <div class="modal-header bg-primary text-white">
+        <h5 class="modal-title fw-bold" id="expenseModalLabel">ADD EXPENSE</h5>
+      </div>
+      <div class="modal-body">
+        <div class="mb-3">
+          <label for="amount" class="form-label">Amount</label>
+          <input
+            type="text"
+            class="form-control rounded-pill shadow-sm"
+            id="amount"
+            placeholder="Enter Amount"
+            [(ngModel)]="budgetAmount"
+            numbersonly 
+            autocomplete="off"
+          />
+        </div>
+        <div class="mb-3">
+          <label for="dropdownSelect" class="form-label">Choose Category</label>
+          <select
+            name="catSelect"
+            id="catSelect"
+            class="form-select rounded-pill shadow-sm styled-dropdown"
+           [(ngModel)]="selectedCategoryId">
+            <option value=null>Select Option</option>
+            <option [value]="category.id" *ngFor="let category of categoryList">
+              {{ getEmoji(category.iconLink) }} {{ category.categoryName }}
+            </option>
+          </select>
+        </div>
+
+        <div class="mb-3">
+          <label for="monthSelect" class="form-label">Month</label>
+          <select
+            name="monthSelect"
+            id="monthSelect"
+            class="form-select rounded-pill shadow-sm styled-dropdown"
+            [(ngModel)]="selectedMonth"
+           disabled>
+            <option *ngFor="let month of months" [value]="month">
+              {{ month }}
+            </option>
+          </select>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button
+          type="button"
+          class="btn btn-outline-secondary rounded-pill"
+          data-bs-dismiss="modal"
         >
           Close
         </button>
@@ -177,6 +282,78 @@
         <button type="button" class="btn btn-success rounded-pill shadow-sm"
         (click)="updateBudgetDetails()" *ngIf="isEditMode">
           Update
+        </button>
+      </div>
+    </div>
+  </div>
+</div> -->
+<!-- Expense Modal -->
+<div
+  class="modal fade"
+  id="expenseModal"
+  tabindex="-1"
+  role="dialog"
+  aria-labelledby="expenseModalLabel"
+  aria-hidden="true"
+  data-bs-backdrop="static"
+>
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content shadow-lg border-0 rounded-3 expense-modal">
+      <div class="modal-header bg-danger text-white">
+        <h5 class="modal-title fw-bold" id="expenseModalLabel">ADD EXPENSE</h5>
+      </div>
+      <div class="modal-body">
+        <div class="mb-3">
+          <label for="amount" class="form-label">Amount</label>
+          <input
+            type="text"
+            class="form-control rounded shadow-sm"
+            id="amount"
+            placeholder="Enter Amount"
+            [(ngModel)]="expenseAmount"
+            numbersonly 
+            autocomplete="off"
+          />
+        </div>
+        <div class="mb-3">
+          <label for="dropdownSelect" class="form-label">Choose Category</label>
+          <select
+            name="catSelect"
+            id="catSelect"
+            class="form-select rounded shadow-sm styled-dropdown"
+            [(ngModel)]="selectExpenseCategoryId">
+            <option value=null>Select Option</option>
+            <option [value]="category.id" *ngFor="let category of categoryList">
+              {{ getEmoji(category.iconLink) }} {{ category.categoryName }}
+            </option>
+          </select>
+        </div>
+
+        <div class="mb-3">
+          <label for="monthSelect" class="form-label">Month</label>
+          <select
+            name="monthSelect"
+            id="monthSelect"
+            class="form-select rounded shadow-sm styled-dropdown"
+            [(ngModel)]="selectedMonth"
+            disabled>
+            <option *ngFor="let month of months" [value]="month">
+              {{ month }}
+            </option>
+          </select>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button
+          type="button"
+          class="btn btn-outline-dark rounded-pill"
+          data-bs-dismiss="modal"
+        (click)="closeExpenseModal()">
+          Close
+        </button>
+        <button type="button" class="btn btn-danger rounded-pill shadow-sm"
+        (click)="addExpenseDetails()">
+          Add Expense
         </button>
       </div>
     </div>

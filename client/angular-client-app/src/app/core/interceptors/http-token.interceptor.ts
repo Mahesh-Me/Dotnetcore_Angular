@@ -33,6 +33,9 @@ export class HttpTokenInterceptor implements HttpInterceptor {
         else{
           errorMessage = error.message;
         }
+        if (error.status === 401){
+          errorMessage = "Unauthorized Access";
+        }
         return throwError(() => new Error(errorMessage));
       })
     );

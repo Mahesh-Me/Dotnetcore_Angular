@@ -21,4 +21,10 @@ export class HeaderComponent {
       }
     })
   }
+  onClickToDashboard(){
+    this._router.navigate(['/services/dashboard']);
+  }
+  onClickToTransaction(){
+    this._router.navigate(['/services/transaction-history']);
+  }
 }

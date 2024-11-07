@@ -1,6 +1,6 @@
 import { Injectable } from "@angular/core";
 import { RepositoryAbstractService } from "../http/repository-abstract.service";
-import { BudgetDetailsDto } from "../../shared/models/budgetDetailsDto";
+import { BudgetDetailsDto, ExpenseDetailsDto } from "../../shared/models/budgetDetailsDto";
 import { Observable } from "rxjs";
 import { ServerResponse } from "../../shared/models/server-response";
 import { CONFIGURATAION } from "../../configs/app-settings.config";
@@ -29,5 +29,13 @@ export class TransactionService{
     deleteBudgetDetailsOfUser(id:any): Observable<ServerResponse>{
         let actionUrl = CONFIGURATAION.ServerURL + CONFIGURATAION.baseURLs.apiUrl + 'Transaction/DeleteBudgetDetails/' + id;
         return this._abstractRepo.add(actionUrl);
+    }
+    saveExpenseDetailsOfUser(expenseDetailsObj:ExpenseDetailsDto): Observable<ServerResponse>{
+        let actionUrl = CONFIGURATAION.ServerURL + CONFIGURATAION.baseURLs.apiUrl + 'Transaction/SaveExpenseDetailsOfUser';
+        return this._abstractRepo.add(actionUrl,expenseDetailsObj);
+    }
+    getTheListofExpenseOfAUser(emailId:string, selectedMonth:string):Observable<ServerResponse>{
+        let actionUrl = CONFIGURATAION.ServerURL + CONFIGURATAION.baseURLs.apiUrl + 'Transaction/GetAllExpenseOfUser/' + emailId + '/' + selectedMonth;
+        return this._abstractRepo.getAll(actionUrl);
     }
 }

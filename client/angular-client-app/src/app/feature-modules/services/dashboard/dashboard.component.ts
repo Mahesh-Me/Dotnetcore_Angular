@@ -6,7 +6,7 @@ import { CategoryMaster } from '../../../shared/models/categoryMasterDto';
 import { SpinnerService } from '../../../core/services/spinner.service';
 import { CommonService } from '../../../core/services/common.service';
 import { LoggerService } from '../../../core/services/logger.service';
-import { BudgetDetailsDto, updateBudgetDetailsDto } from '../../../shared/models/budgetDetailsDto';
+import { BudgetDetailsDto, ExpenseDetailsDto, updateBudgetDetailsDto } from '../../../shared/models/budgetDetailsDto';
 import { CurrentUserService } from '../../../core/authentication/currentuser.service';
 import { Router } from '@angular/router';
 import { TransactionService } from '../../../core/services/transaction.service';
@@ -25,10 +25,16 @@ export class DashboardComponent {
   categoryList: CategoryMaster[] = [];
   selectedCategoryId: number | null = null;
   budgetDetailsObj: BudgetDetailsDto = new BudgetDetailsDto();
+  expenseDetailsObj: ExpenseDetailsDto = new ExpenseDetailsDto();
   selectedMonth: string = '';
   budgetList:BudgetDetailsDto[] = [];
   isEditMode:boolean = false;
   item:updateBudgetDetailsDto = new updateBudgetDetailsDto();
+  expenseAmount!: number;
+  selectExpenseCategoryId:number | null = null ;
+  totalPlannedAmount!: number;
+  totalSpentAmount !: number;
+  expenseListOfUser:ExpenseDetailsDto[] = [];
 
   months = [
     'January', 'February', 'March', 'April', 'May', 'June',
@@ -49,6 +55,7 @@ export class DashboardComponent {
     const currentMonthIndex = new Date().getMonth();
     this.selectedMonth = this.months[currentMonthIndex];
     this.getAllBudgetListByUserForOneMonth();
+    this.getAllExpenseDetailsOfUser();
   }
 
   openBudgetModal() {
@@ -62,6 +69,9 @@ export class DashboardComponent {
   if (modalInstance) {
     modalInstance.hide();
   }
+  this.isEditMode = false;
+  this.budgetAmount = undefined!;
+  this.selectedCategoryId = null;
   }
   getEmoji(iconLink: string): string {
     const iconMap: { [key: string]: string } = {
@@ -130,6 +140,7 @@ export class DashboardComponent {
               this._loggerService.logSuccess("Budget Saved Successfully");
               this._spinnerService.hideLoader();
               this.closeBudgetModal();
+              this.getAllBudgetListByUserForOneMonth();
               this.budgetAmount = 0;
               this.selectedCategoryId = null;
 
@@ -158,6 +169,7 @@ export class DashboardComponent {
           if(res != null){
             this.budgetList = res;
             this._spinnerService.hideLoader();
+            this.totalPlannedAmount = this.budgetList.reduce((total, item) => total + item.expenseLimit, 0)
           }
           this._spinnerService.hideLoader();
         },
@@ -233,6 +245,99 @@ export class DashboardComponent {
         if(err){
           this._spinnerService.hideLoader();
           this._loggerService.logError(err.message);
+        }
+      },
+      complete: () => {
+        this._spinnerService.hideLoader();
+      }
+    })
+  }
+}
+openExpenseModal() {
+  const modal = new bootstrap.Modal(document.getElementById('expenseModal') as HTMLElement);
+  modal.show();
+}
+
+closeExpenseModal() {
+  const modalElement = document.getElementById('expenseModal') as HTMLElement;
+  const modalInstance = bootstrap.Modal.getInstance(modalElement);
+if (modalInstance) {
+  modalInstance.hide();
+}
+this.isEditMode = false;
+  this.expenseAmount = 0;
+  this.selectExpenseCategoryId = null;
+}
+addExpenseDetails(){
+  if(this.validateExpenseDetails()){
+    this._spinnerService.showLoader();
+      this.expenseDetailsObj = new ExpenseDetailsDto();
+      this.expenseDetailsObj.categoryId = this.selectExpenseCategoryId;
+      this.expenseDetailsObj.expenseAmount = this.expenseAmount;
+      this.expenseDetailsObj.emailId = this._currentUserService.getEmailId!;
+      this.expenseDetailsObj.month = this.selectedMonth;
+
+      if(this.expenseDetailsObj.emailId == '' || this.expenseDetailsObj.emailId == undefined){
+        this._loggerService.logError("An Error Occured...");
+        this._spinnerService.hideLoader();
+        this._router.navigate(['/auth/login']);
+      }
+      else{
+        this._transactionService.saveExpenseDetailsOfUser(this.expenseDetailsObj).subscribe({
+          next: (res:any) =>{
+            if(res && res != null){
+              this._loggerService.logSuccess("Saved Successfully");
+              this._spinnerService.hideLoader();
+              this.closeExpenseModal();
+              this.expenseAmount = 0;
+              this.selectExpenseCategoryId = null;
+              this.getAllBudgetListByUserForOneMonth();
+              this.getAllExpenseDetailsOfUser();
+            }
+            this._spinnerService.hideLoader();
+          },
+          error: (err) => {
+            if(err){
+              this._loggerService.logError(err.message);
+              this._spinnerService.hideLoader();
+            }
+          },
+          complete: () => {
+            this._spinnerService.hideLoader();
+          }
+        })
+      }
+  }
+}
+validateExpenseDetails(): boolean{
+  if(this.expenseAmount == 0 || this.expenseAmount < 0 || this.expenseAmount == undefined){
+    this._loggerService.logError("Invalid input for Amount.");
+    $('#amount').get(0)?.focus();
+    return false;
+  }
+  if(this.selectExpenseCategoryId == 0 || this.selectExpenseCategoryId == undefined){
+    this._loggerService.logError("Please Select a Category.");
+    return false;
+  }
+  return true;
+}
+getAllExpenseDetailsOfUser(){
+  let emailId = this._currentUserService.getEmailId;
+  if(emailId != null || emailId != undefined){
+    this._spinnerService.showLoader();
+    this._transactionService.getTheListofExpenseOfAUser(emailId,this.selectedMonth).subscribe({
+      next: (res:any) => {
+        if(res != null){
+          this.expenseListOfUser = res;
+          this._spinnerService.hideLoader();
+          this.totalSpentAmount = this.expenseListOfUser.reduce((total, item) => total + item.expenseAmount, 0)
+        }
+        this._spinnerService.hideLoader();
+      },
+      error: (err) => {
+        if(err){
+          this._loggerService.logError(err.message);
+          this._spinnerService.hideLoader();
         }
       },
       complete: () => {
