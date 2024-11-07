@@ -84,5 +84,50 @@ namespace Business
             _transactionRepository.DeleteCategoryBudget(id);
             return true;
         }
+        public bool SaveExpenseDetailsOfUser(TransactionExpenseDto expenseDto)
+        {
+            if (expenseDto is null)
+                throw new ArgumentNullException("Invalid Details Recieved");
+
+            if (expenseDto.EmailId == null)
+                throw new ArgumentNullException("An Error Occured....");
+
+            Users userByEmailId = _userRepository.GetUserByEmailId(expenseDto.EmailId);
+
+            if (userByEmailId is null)
+                throw new ArgumentException("Not Authorized....");
+
+            //check if against the same category and same month already exist budget
+            ExpenseTransaction budgetObj = _transactionRepository.GetCategoryExpense(expenseDto.CategoryId, expenseDto.Month!, userByEmailId.Id);
+            if (budgetObj != default)
+            {
+                budgetObj.ExpenseAmount = Convert.ToInt32(budgetObj.ExpenseAmount + expenseDto.ExpenseAmount);
+                _transactionRepository.UpdateExpenseDetails(budgetObj);
+            }
+            else
+            {
+                ExpenseTransaction expenseObj = new ExpenseTransaction();
+                expenseObj.CategoryId = expenseDto.CategoryId;
+                expenseObj.UserId = userByEmailId.Id;
+                expenseObj.ExpenseAmount = expenseDto.ExpenseAmount;
+                expenseObj.Month = expenseDto.Month;
+
+                _transactionRepository.SaveExpenseDetailsOfUser(expenseObj);
+            }
+            return true;
+        }
+        public List<ExpenseTransaction> GetAllExpenseDetails(string emailId, string month)
+        {
+            if (emailId is null && month is null)
+                throw new ArgumentNullException("Invalid parameter recieved.");
+
+            Users userByEmail = _userRepository.GetUserByEmailId(emailId!);
+            if (userByEmail is null)
+                throw new ArgumentNullException("Not Authorized...");
+
+            List<ExpenseTransaction> allBudgets = new List<ExpenseTransaction>();
+            allBudgets = _transactionRepository.GetAllExpenseListByUserId(userByEmail.Id, month);
+            return allBudgets;
+        }
     }
 }

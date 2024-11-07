@@ -110,5 +110,53 @@ namespace InventoryAPI.Controllers
                 return BadRequest(ex.Message);
             }
         }
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+        [HttpPost]
+        [Route("SaveExpenseDetailsOfUser")]
+        public IActionResult SaveExpenseDetailsOfUser(TransactionExpenseDto categoryudgetDto)
+        {
+            try
+            {
+                var result = _transactionService.SaveExpenseDetailsOfUser(categoryudgetDto);
+                return Ok(result);
+            }
+
+            catch (ArgumentNullException ex)
+            {
+                _logger.LogError(ex.Message, ex);
+                return BadRequest(ex.Message);
+            }
+            catch (ArgumentException ex)
+            {
+                _logger.LogError(ex.Message, ex);
+                return BadRequest(ex.Message);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex.Message, ex);
+                return BadRequest(ex.Message);
+            }
+        }
+        [Authorize]
+        [HttpGet]
+        [Route("GetAllExpenseOfUser/{emailId}/{selectedMonth}")]
+        public IActionResult GetAllExpenseOfUser(string emailId, string selectedMonth)
+        {
+            try
+            {
+                var result = _transactionService.GetAllExpenseDetails(emailId, selectedMonth);
+                return Ok(result);
+            }
+            catch (ArgumentNullException ex)
+            {
+                _logger.LogError(ex.Message, ex);
+                return BadRequest(ex.Message);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex.Message, ex);
+                return BadRequest(ex.Message);
+            }
+        }
     }
 }

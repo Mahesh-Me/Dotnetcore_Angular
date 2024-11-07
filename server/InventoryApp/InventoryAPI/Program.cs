@@ -76,10 +76,9 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
+app.UseCors("AllowCors");
 app.UseAuthentication();
 app.UseAuthorization();
-
-app.UseCors("AllowCors");
 
 app.MapControllers();
 

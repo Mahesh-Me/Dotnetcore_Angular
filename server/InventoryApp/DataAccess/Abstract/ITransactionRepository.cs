@@ -12,5 +12,9 @@ namespace DataAccess.Abstract
         List<CategoryBudget> GetAllCategoryListByUserId(int userId, string month);
         CategoryBudget GetCategoryBudget(int id);
         bool DeleteCategoryBudget(int id);
+        bool SaveExpenseDetailsOfUser(ExpenseTransaction categoryBudget);
+        List<ExpenseTransaction> GetAllExpenseListByUserId(int userId, string month);
+        ExpenseTransaction GetCategoryExpense(int categoryId, string month, int userId);
+        bool UpdateExpenseDetails(ExpenseTransaction categoryBudget);
     }
 }

@@ -21,6 +21,7 @@ namespace DataAccess
         public DbSet<UserRoles> UserRoles { get; set; }
         public DbSet<CategoryMaster> CategoryMaster {  get; set; }
         public DbSet<CategoryBudget> CategoryBudget { get; set; }
+        public DbSet<ExpenseTransaction> ExpenseTransaction { get; set; }
         #endregion
     }
 }
