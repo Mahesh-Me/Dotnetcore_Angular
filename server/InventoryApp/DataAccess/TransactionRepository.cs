@@ -66,5 +66,40 @@ namespace DataAccess
             _context.SaveChanges(true);
             return true;
         }
+
+        public bool SaveExpenseDetailsOfUser(ExpenseTransaction categoryBudget)
+        {
+            if (categoryBudget == null)
+            {
+                throw new ArgumentException("Invalid data");
+            }
+            _context.ExpenseTransaction.Add(categoryBudget);
+            _context.SaveChanges();
+            return true;
+        }
+        public List<ExpenseTransaction> GetAllExpenseListByUserId(int userId, string month)
+        {
+            return _context.ExpenseTransaction.Where(ct => ct.UserId == userId && ct.Month == month).ToList();
+        }
+        public ExpenseTransaction GetCategoryExpense(int categoryId, string month, int userId)
+        {
+            ExpenseTransaction budgetObj = new ExpenseTransaction();
+            if (categoryId != 0 && !string.IsNullOrEmpty(month))
+            {
+                budgetObj = _context.ExpenseTransaction.FirstOrDefault(ct => ct.UserId == userId && ct.CategoryId == categoryId
+                                                          && ct.Month.Equals(month));
+            }
+            return budgetObj;
+        }
+        public bool UpdateExpenseDetails(ExpenseTransaction categoryBudget)
+        {
+            if (categoryBudget == null)
+            {
+                throw new ArgumentException("Invalid data");
+            }
+            _context.ExpenseTransaction.Update(categoryBudget);
+            _context.SaveChanges();
+            return true;
+        }
     }
 }
