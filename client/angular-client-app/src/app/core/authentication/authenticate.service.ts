@@ -8,6 +8,7 @@ import { LoggerService } from '../services/logger.service';
 import { RepositoryAbstractService } from '../http/repository-abstract.service';
 import { of as observableOf, of } from 'rxjs';
 import { RegisterUserDto } from '../../shared/models/registerUserDto';
+import { ChangePasswordDto } from '../../shared/models/changePasswordDto';
 
 @Injectable()
 export class AuthenticateService {
@@ -55,5 +56,9 @@ export class AuthenticateService {
   registerUser(registerDto:RegisterUserDto):Observable<ServerResponse>{
     let actionUrl = CONFIGURATAION.ServerURL + CONFIGURATAION.baseURLs.apiUrl + 'Token/Register';
     return this.abstractRepository.add(actionUrl,registerDto);
+  }
+  changePasswordOfUser(changePassword:ChangePasswordDto): Observable<ServerResponse>{
+    let actionUrl = CONFIGURATAION.ServerURL + CONFIGURATAION.baseURLs.apiUrl + 'Token/ChangePassword';
+    return this.abstractRepository.add(actionUrl,changePassword);
   }
 }
