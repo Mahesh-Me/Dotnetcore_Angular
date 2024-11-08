@@ -37,5 +37,11 @@ namespace DataAccess
         {
             await _context.SaveChangesAsync();
         }
+        public bool UpdateUser(Users user)
+        {
+            _context.Users.Update(user);
+            _context.SaveChanges();
+            return true;
+        }
     }
 }

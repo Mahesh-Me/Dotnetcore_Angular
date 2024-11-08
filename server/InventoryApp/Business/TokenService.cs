@@ -138,5 +138,26 @@ namespace Business
 
             return passwordBuilder.ToString();
         }
+
+        public bool ChangePasswordOfUser(ChangePasswordDto passwordDto)
+        {
+            if (passwordDto is null || passwordDto == default)
+                throw new ArgumentNullException("Invalid parameter received");
+
+            if (passwordDto.EmailId is null)
+                throw new ArgumentNullException("Invalid Email Id");
+
+            Users user = _userRepository.GetUserByEmailId(passwordDto.EmailId);
+            if(user is null)
+                throw new ArgumentNullException("User Not found.");
+
+            if (user.Password!.Equals(passwordDto.OldPassword))
+            {
+                throw new Exception("Old Password is incorrect");
+            }
+            user.Password = passwordDto.NewPassword;
+            _userRepository.UpdateUser(user);
+            return true;
+        }
     }
 }

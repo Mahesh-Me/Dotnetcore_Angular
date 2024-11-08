@@ -10,5 +10,6 @@ namespace DataAccess.Abstract
         Task<Users> SaveUser(Users user);
         Task SaveChanges();
         Task SaveUserRole(UserRoles userRole);
+        bool UpdateUser(Users user);
     }
 }

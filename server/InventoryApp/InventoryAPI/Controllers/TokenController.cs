@@ -1,6 +1,7 @@
 ﻿
 using Business.Abstract;
 using Domain.Dtos;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace InventoryAPI.Controllers
@@ -52,6 +53,28 @@ namespace InventoryAPI.Controllers
                 return Ok(result);
             }
             catch (ArgumentException ex)
+            {
+                _logger.LogError(ex, "Error Occured");
+                return BadRequest(ex.Message);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error occured");
+                return BadRequest(ex.Message);
+            }
+        }
+
+        [Authorize]
+        [HttpPost]
+        [Route("ChangePassword")]
+        public IActionResult ChangePassword(ChangePasswordDto changePasswordDto) 
+        {
+            try
+            {
+                var result = _tokenService.ChangePasswordOfUser(changePasswordDto);
+                return Ok(result);
+            }
+            catch(ArgumentNullException ex)
             {
                 _logger.LogError(ex, "Error Occured");
                 return BadRequest(ex.Message);
