@@ -19,18 +19,14 @@
           <li class="nav-item">
             <a class="nav-link" (click)="onClickToTransaction()" style="cursor: pointer;">Transactions</a>
           </li>
-          <li class="nav-item">
-            <a class="nav-link" href="#">Reports</a>
-          </li>
-  
           <!-- User Dropdown Menu -->
           <li class="nav-item dropdown">
             <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
               <i class="bi bi-person-circle"></i>
             </a>
             <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
-              <li><a class="dropdown-item" href="#">Change Password</a></li>
-              <li><a class="dropdown-item" (click)="onLogOut()">Logout</a></li>
+              <li><a class="dropdown-item" (click)="openExpenseModal()" style="cursor: pointer;">Change Password</a></li>
+              <li><a class="dropdown-item" (click)="onLogOut()" style="cursor: pointer;">Logout</a></li>
             </ul>
           </li>
         </ul>
@@ -38,3 +34,36 @@
     </div>
   </nav>
   
+  <!-- Change Password Modal -->
+<!-- Change Password Modal -->
+<div class="modal fade" id="changePasswordModal" tabindex="-1" aria-labelledby="changePasswordModalLabel" aria-hidden="true"
+data-bs-backdrop="static" data-bs-keyboard="false">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content p-4">
+      <div class="modal-header">
+        <h5 class="modal-title" id="changePasswordModalLabel">Change Password</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <form [formGroup]="changePasswordForm" (ngSubmit)="onSubmit()">
+          <div class="mb-4">
+            <label for="oldPassword" class="form-label">Old Password</label>
+            <input type="password" id="oldPassword" formControlName="oldPassword" class="form-control styled-input" placeholder="Enter old password" />
+          </div>
+          <div class="mb-4">
+            <label for="newPassword" class="form-label">New Password</label>
+            <input type="password" id="newPassword" formControlName="newPassword" class="form-control styled-input" placeholder="Enter new password" />
+            <div *ngIf="newPasswordMismatch" class="text-danger small mt-1">New password cannot be the same as the old password.</div>
+          </div>
+          <div class="mb-4">
+            <label for="confirmPassword" class="form-label">Confirm Password</label>
+            <input type="password" id="confirmPassword" formControlName="confirmPassword" class="form-control styled-input" placeholder="Confirm new password" />
+            <div *ngIf="passwordsDoNotMatch" class="text-danger small mt-1">New password and confirm password must match.</div>
+          </div>
+          <button type="submit" class="btn btn-primary w-100 rounded-pill" [disabled]="changePasswordForm.invalid">Submit</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
