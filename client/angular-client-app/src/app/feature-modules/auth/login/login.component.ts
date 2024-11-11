@@ -8,7 +8,7 @@ import { AuthenticateService } from '../../../core/authentication/authenticate.s
 import { ServerResponse } from '../../../shared/models/server-response';
 import { Router } from '@angular/router';
 import { RegisterUserDto } from '../../../shared/models/registerUserDto';
-
+import * as bootstrap from "bootstrap";
 
 @Component({
   selector: 'app-login',
@@ -21,6 +21,7 @@ export class LoginComponent {
 
 
 
+  email !: string;
   isLoginMode:boolean = true;
   loginDto:LoginDto = new LoginDto();
   registrationForm !:FormGroup;
@@ -143,4 +144,42 @@ export class LoginComponent {
       }
     }
   }
+  openForgotPasswordModal() {
+    const modal = new bootstrap.Modal(document.getElementById('forgotPasswordModal') as HTMLElement);
+    modal.show();
+  }
+  closeForgotPasswordModal() {
+    const modalElement = document.getElementById('forgotPasswordModal') as HTMLElement;
+    const modalInstance = bootstrap.Modal.getInstance(modalElement);
+  if (modalInstance) {
+    modalInstance.hide();
+  }
+}
+forgotPasswordOfUser(){
+  if(this.email.trim() == '' || this.email == undefined || this.email == null){
+    this._logger.logError("Invalid Email Address");
+  }
+  else{
+    this._spinner.showLoader();
+    this._authService.forgotPasswordOfUser(this.email).subscribe({
+      next: (res:any) => {
+        if(res != null){
+          this._logger.logSuccess("Email has been sent containing your new password.");
+          this._spinner.hideLoader();
+          this.email = '';
+        }
+        this._spinner.hideLoader();
+      },
+      error: (err) => {
+        if(err){
+          this._spinner.hideLoader();
+          this._logger.logError(err.message);
+        }
+      },
+      complete: () => {
+        this._spinner.hideLoader();
+      }
+    })
+  }
+}
 }
