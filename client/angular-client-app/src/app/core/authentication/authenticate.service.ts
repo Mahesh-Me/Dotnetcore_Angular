@@ -61,4 +61,8 @@ export class AuthenticateService {
     let actionUrl = CONFIGURATAION.ServerURL + CONFIGURATAION.baseURLs.apiUrl + 'Token/ChangePassword';
     return this.abstractRepository.add(actionUrl,changePassword);
   }
+  forgotPasswordOfUser(email:string):Observable<ServerResponse>{
+    let actionUrl = CONFIGURATAION.ServerURL + CONFIGURATAION.baseURLs.apiUrl + 'Token/ForgotPasswordOfUser/' + email;
+    return this.abstractRepository.add(actionUrl);
+  }
 }

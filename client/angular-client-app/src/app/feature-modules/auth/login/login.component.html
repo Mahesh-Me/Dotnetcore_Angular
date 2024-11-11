@@ -21,7 +21,7 @@
       </form>
       <div class="mt-3" style="text-align: end;">
         <small>
-          <a href="javascript:void(0)">Forgot Password?</a>
+          <a href="javascript:void(0)" (click)="openForgotPasswordModal()" style="cursor: pointer;">Forgot Password?</a>
         </small>
       </div>
       <div class="mt-3 text-center">
@@ -69,7 +69,7 @@
             <span class="text-red">*</span>
           </label>
           <input type="text" id="mobile" name="mobile" class="form-control" formControlName="mobileNumber"
-            autocomplete="off" placeholder="Enter Mobile Number" maxlength="10">
+            autocomplete="off" placeholder="Enter Mobile Number" maxlength="10" numbersonly>
           <div *ngIf="(registerFormControl['mobileNumber']?.touched)" class="text-danger">
             <small *ngIf="registrationForm.get('mobileNumber')?.errors?.['required']">Mobile number is required.</small>
             <small *ngIf="registrationForm.get('mobileNumber')?.errors?.['pattern']">Invalid mobile number. Must start
@@ -120,3 +120,25 @@
     </div>
   </div>
 </div>
+
+<!--Forgot Passowrd Modal-->
+<div class="modal fade" id="forgotPasswordModal" tabindex="-1" aria-labelledby="forgotPasswordModalLabel" aria-hidden="true"
+data-bs-backdrop="static">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="forgotPasswordModalLabel">Forgot Password</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <form #forgotPasswordForm="ngForm">
+          <div class="mb-3">
+            <label for="email" class="form-label">Enter your email address</label>
+            <input type="email" id="email" class="form-control" placeholder="Email" required [(ngModel)]="email" name="email"
+            autocomplete="off">
+          </div>
+          <button type="submit" class="btn btn-primary">Send Password</button>
+        </form>
+      </div>
+    </div>
+  </div>
