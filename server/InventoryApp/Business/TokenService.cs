@@ -159,5 +159,21 @@ namespace Business
             _userRepository.UpdateUser(user);
             return true;
         }
+        public bool ForgotPasswordOfUser(string email)
+        {
+            if (email is null)
+                throw new ArgumentNullException("email", "Invalid parameter received");
+
+            Users userObj = _userRepository.GetUserByEmailId(email);
+
+            if (userObj is null)
+                throw new ArgumentException("User not found.");
+
+            string password = GenerateRandomPassword(8);
+            userObj.Password = password;
+            _userRepository.UpdateUser(userObj);
+            _emailService.SendMailAsync(userObj.EmailId!,"New Password",$"Your new password is {password}");
+            return true;
+        }
     }
 }

@@ -7,5 +7,6 @@ namespace Business.Abstract
         LogInResponseDto Login(LogInDto loginDto);
         Task<bool> RegisterUser(RegisterUserDto userDto);
         bool ChangePasswordOfUser(ChangePasswordDto passwordDto);
+        bool ForgotPasswordOfUser(string email);
     }
 }

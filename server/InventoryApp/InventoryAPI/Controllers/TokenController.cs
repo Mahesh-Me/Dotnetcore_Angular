@@ -85,5 +85,30 @@ namespace InventoryAPI.Controllers
                 return BadRequest(ex.Message);
             }
         }
+        [HttpPost]
+        [Route("ForgotPasswordOfUser/{email}")]
+        public IActionResult ForgotPasswordOfUser(string email)
+        {
+            try
+            {
+                var result = _tokenService.ForgotPasswordOfUser(email);
+                return Ok(result);
+            }
+            catch (ArgumentNullException ex)
+            {
+                _logger.LogError(ex, "Error Occured");
+                return BadRequest(ex.Message);
+            }
+            catch(ArgumentException ex)
+            {
+                _logger.LogError(ex, "Error Occured");
+                return BadRequest(ex.Message);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error occured");
+                return BadRequest(ex.Message);
+            }
+        }
     }
 }
