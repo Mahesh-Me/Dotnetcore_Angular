@@ -72,11 +72,11 @@ export class LoginComponent {
           this._spinner.hideLoader();
         },
         error: (err) => {
-          this._logger.logError(err.message);
           this._spinner.hideLoader();
+          this._logger.logError(err.message);
         },
         complete: () => {
-          this._spinner.hideLoader(); // Ensure the spinner is hidden when done
+          this._spinner.hideLoader();
         }
       });
     }
@@ -166,6 +166,7 @@ forgotPasswordOfUser(){
         if(res != null){
           this._logger.logSuccess("Email has been sent containing your new password.");
           this._spinner.hideLoader();
+          this.closeForgotPasswordModal();
           this.email = '';
         }
         this._spinner.hideLoader();

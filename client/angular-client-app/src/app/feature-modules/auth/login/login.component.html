@@ -137,7 +137,7 @@ data-bs-backdrop="static">
             <input type="email" id="email" class="form-control" placeholder="Email" required [(ngModel)]="email" name="email"
             autocomplete="off">
           </div>
-          <button type="submit" class="btn btn-primary">Send Password</button>
+          <button type="submit" class="btn btn-primary" (click)="forgotPasswordOfUser()">Send Password</button>
         </form>
       </div>
     </div>

@@ -167,7 +167,7 @@ export class DashboardComponent {
       this._transactionService.getAllBudgetListForUser(emailId,this.selectedMonth).subscribe({
         next: (res:any) => {
           if(res != null){
-            this.budgetList = res;
+            this.budgetList = res.filter((i: { expenseLimit: number; }) => i.expenseLimit != 0);
             this._spinnerService.hideLoader();
             this.totalPlannedAmount = this.budgetList.reduce((total, item) => total + item.expenseLimit, 0)
           }
@@ -239,6 +239,7 @@ export class DashboardComponent {
         if(res != null){
           this._spinnerService.hideLoader();
           this._loggerService.logSuccess("Deleted Successfully.");
+          this.getAllBudgetListByUserForOneMonth();
         }
       },
       error: (err) => {

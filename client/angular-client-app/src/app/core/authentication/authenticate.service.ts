@@ -9,6 +9,7 @@ import { RepositoryAbstractService } from '../http/repository-abstract.service';
 import { of as observableOf, of } from 'rxjs';
 import { RegisterUserDto } from '../../shared/models/registerUserDto';
 import { ChangePasswordDto } from '../../shared/models/changePasswordDto';
+import { SpinnerService } from '../services/spinner.service';
 
 @Injectable()
 export class AuthenticateService {
@@ -18,11 +19,13 @@ export class AuthenticateService {
     private currentUserService: CurrentUserService,
     private _logger:LoggerService,
     private abstractRepository: RepositoryAbstractService,
+    private _spinnerService: SpinnerService
   ) { }
 
   public logIn(loginDto:LoginDto): Observable<ServerResponse>{
     let actionUrl = CONFIGURATAION.ServerURL + CONFIGURATAION.baseURLs.apiUrl + 'Token/Login';
     this.currentUserService.setToken = null;
+    this._spinnerService.showLoader();
     return new Observable((observer => {
       this.abstractRepository.add(actionUrl,loginDto).subscribe({
         next: (response:any) => {
@@ -36,6 +39,7 @@ export class AuthenticateService {
         },
         error:(err => {
           if(err){
+            this._spinnerService.hideLoader();
               this._logger.logError(err.message);
           }
         })
