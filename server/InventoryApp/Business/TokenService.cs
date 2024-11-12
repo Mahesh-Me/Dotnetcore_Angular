@@ -151,7 +151,7 @@ namespace Business
             if(user is null)
                 throw new ArgumentNullException("User Not found.");
 
-            if (user.Password!.Equals(passwordDto.OldPassword))
+            if (!user.Password!.Equals(passwordDto.OldPassword))
             {
                 throw new Exception("Old Password is incorrect");
             }
